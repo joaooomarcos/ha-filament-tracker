@@ -3,9 +3,9 @@
 ![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/joaooomarcos/ha-filament-tracker?style=for-the-badge)
 
 
-![GitHub Release Date](https://img.shields.io/github/release-date-pre/joaooomarcos/ha-filament-tracker?style=for-the-badge&label=Latest%20Beta%20Release) [![GitHub Release](https://img.shields.io/github/v/release/joaooomarcos/ha-filament-tracker?include_prereleases&style=for-the-badge)](https://github.com/joaooomarcos/ha-filament-tracker/releases)
+[![GitHub Release](https://img.shields.io/github/v/release/joaooomarcos/ha-filament-tracker?include_prereleases&style=for-the-badge)](https://github.com/joaooomarcos/ha-filament-tracker/releases)
 
-![GitHub Release Date](https://img.shields.io/github/release-date/joaooomarcos/ha-filament-tracker?style=for-the-badge&label=Latest%20Release) [![GitHub Release](https://img.shields.io/github/v/release/joaooomarcos/ha-filament-tracker?style=for-the-badge)](https://github.com/joaooomarcos/ha-filament-tracker/releases)
+![GitHub Release Date](https://img.shields.io/github/release-date/joaooomarcos/ha-filament-tracker?style=for-the-badge&label=Latest%20Release)
 
 
 # Filament Tracker
@@ -14,7 +14,7 @@ A Home Assistant Integration to track your usage of filaments on 3D Printing. It
 
 ## Contribution
 
-[Want to contribute to ha-bambulab?](https://docs.page/joaooomarcos/ha-filament-tracker/misc/contributing)
+[Want to contribute?](https://docs.page/joaooomarcos/ha-filament-tracker/CONTRIBUTION.md)
 
 ## Setup
 
