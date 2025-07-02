@@ -1,0 +1,33 @@
+use_filament:
+  name: Use filament
+  description: Decreases the weight and lenght of the filament spool with the given color.
+  fields:
+    weight:
+      name: Weight
+      description: Amount of weight to subtract (in grams)
+      required: true
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 10000
+          step: 1
+          unit_of_measurement: g
+    meters:
+      name: Lenght
+      description: Amount of filament to subtract (in meters)
+      required: true
+      example: 10
+      selector:
+        number:
+          min: 0
+          max: 1000
+          step: 0.01
+          unit_of_measurement: m
+    color:
+      name: Color
+      description: Color of the filament to use (must match exactly)
+      required: true
+      example: "#FF0000"
+      selector:
+        text:

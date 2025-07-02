@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "name": "Name",
+          "color": "Color",
+          "initial_length": "Remaining filament length (m)",
+          "initial_weight": "Remaining filament weight (g)",
+          "price": "Purchase price (R$)",
+          "brand": "Brand",
+          "type": "Type",
+          "model": "Model"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "ams_active": "AMS Active",
+          "usage_meters": "Print Length",
+          "usage_grams": "Print Weight",
+          "ams_tray_1": "AMS Tray 1",
+          "ams_tray_2": "AMS Tray 2",
+          "ams_tray_3": "AMS Tray 3",
+          "ams_tray_4": "AMS Tray 4"
+        }
+      }
+    }
+  },
+  "services": {
+    "use_filament": {
+      "notification": {
+        "title": "Filament Usage 🧵",
+        "message": "This print used {weight:.2f}g.\nEstimated cost: R$ {cost:.2f}\nRemaining on spool: {new_weight:.2f}g and {new_meters:.2f}m"
+      }
+    }
+  }
+}

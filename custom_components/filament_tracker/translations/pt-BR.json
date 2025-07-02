@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "name": "Nome",
+          "color": "Cor",
+          "initial_length": "Comprimento restante do filamento (m)",
+          "initial_weight": "Peso restante do filamento (g)",
+          "price": "Preço de compra (R$)",
+          "brand": "Marca",
+          "type": "Tipo",
+          "model": "Modelo"
+        }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "data": {
+          "ams_active": "AMS Ativo",
+          "usage_meters": "Tamanho da impressão",
+          "usage_grams": "Peso da impressão",
+          "ams_tray_1": "Bandeja AMS 1",
+          "ams_tray_2": "Bandeja AMS 2",
+          "ams_tray_3": "Bandeja AMS 3",
+          "ams_tray_4": "Bandeja AMS 4"
+        }
+      }
+    }
+  },
+  "services": {
+    "use_filament": {
+      "notification": {
+        "title": "Uso do Filamento 🧵",
+        "message": "Peso utilizado {weight:.2f}g.\nCusto estimado: R$ {cost:.2f}\nRestante: {new_weight:.2f}g e {new_meters:.2f}m"
+      }
+    }
+  }
+}

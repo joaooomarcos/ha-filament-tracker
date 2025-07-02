@@ -1,0 +1,7 @@
+{
+  "name": "Filament Tracker",
+  "render_readme": true,
+  "homeassistant": "2025.1.1",
+  "zip_release": true,
+  "filename": "filament_tracker.zip"
+}
