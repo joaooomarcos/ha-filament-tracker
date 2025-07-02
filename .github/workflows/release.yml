@@ -1,0 +1,50 @@
+name: Publish
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  release_zip_file:
+    name: Build and publish Home Assistant custom component release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: 🛍️ Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: 💿 Install Dependencies
+        run: pip install -r requirements.txt
+        working-directory: "${{ github.workspace }}/scripts"
+
+      - name: 📝 Update manifest version
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"
+          sed -i 's/"version": "[^"]*"/"version": "'"$VERSION"'"/' '${{ github.workspace }}/custom_components/filament_tracker/manifest.json'
+
+      - name: 🧹 Remove old zip if exists
+        run: rm -f '${{ github.workspace }}/custom_components/filament_tracker/filament_tracker.zip'
+
+      - name: 🧪 Validate manifest.json
+        run: |
+          python -m json.tool < '${{ github.workspace }}/custom_components/filament_tracker/manifest.json'
+
+      - name: 🤐 Zip custom component
+        if: ${{ github.event_name == 'release' }}
+        run: |
+          cd '${{ github.workspace }}/custom_components/filament_tracker'
+          zip -r filament_tracker.zip . -x "*.git*" "__pycache__/*" "*.DS_Store"
+
+      - name: ☁️ Upload zip to release
+        uses: softprops/action-gh-release@v2.3.2
+        if: ${{ github.event_name == 'release' }}
+        with:
+          files: "${{ github.workspace }}/custom_components/filament_tracker/filament_tracker.zip"
