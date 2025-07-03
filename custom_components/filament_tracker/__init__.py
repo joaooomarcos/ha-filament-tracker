@@ -17,6 +17,7 @@ from .const import DOMAIN
 _LOGGER = logging.getLogger(__package__)
 
 SERVICE_USE_FILAMENT = "use_filament"
+LAST_ACTIVE_TRAY_KEY = f"{DOMAIN}_last_active_tray"
 
 SERVICE_SCHEMA = vol.Schema(
     {
@@ -107,6 +108,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
             if color_state and normalize_color(color_state.state) == normalize_color(
                 color
             ):
+                found = True
                 weight_entity_id = f"number.{entry_id_base}_weight"
                 meters_entity_id = f"number.{entry_id_base}_lenght"
                 weight_state = hass.states.get(weight_entity_id)
@@ -205,6 +207,7 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Filament Tracker from a config entry."""
+    _LOGGER.debug("Setting up Filament Tracker entry: %s", entry.entry_id)
     entry.async_on_unload(entry.add_update_listener(async_update_options))
 
     await hass.config_entries.async_forward_entry_setups(entry, ["number", "sensor"])
@@ -227,27 +230,31 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         and usage_meters_entity
         and any(ams_trays)
     ):
+        _LOGGER.debug("AMS status")
+
+        @callback
+        def _tray_active_listener(event, tray_id):
+            """Track last tray that became active."""
+            _LOGGER.debug("Tray %s state changed: %s", tray_id, event.data)
+            new_state = event.data.get("new_state")
+            if new_state and new_state.attributes.get("active") is True:
+                _LOGGER.debug("Tray %s is now active", tray_id)
+                hass.data[LAST_ACTIVE_TRAY_KEY] = tray_id
 
         @callback
         def _ams_status_changed(event):
             """Handle AMS status going from on to off."""
+            _LOGGER.debug("AMS status changed: %s", event.data)
             old_state = event.data.get("old_state")
             new_state = event.data.get("new_state")
             if not old_state or not new_state:
                 return
             if old_state.state == "on" and new_state.state == "off":
-                # Descobrir qual AMS_TRAY está ativo
-                active_tray = None
-                for tray in ams_trays:
-                    if not tray:
-                        continue
-                    tray_state = hass.states.get(tray)
-                    if tray_state and tray_state.attributes.get("active") is True:
-                        active_tray = tray
-                        break
+                active_tray = hass.data.get(LAST_ACTIVE_TRAY_KEY)
                 if not active_tray:
-                    _LOGGER.warning("No AMS tray is active at AMS shutdown")
+                    _LOGGER.warning("No tray was recently active at AMS shutdown")
                     return
+                hass.data.pop(LAST_ACTIVE_TRAY_KEY, None)
                 color = hass.states.get(active_tray).attributes.get("color")
                 weight = float(hass.states.get(usage_grams_entity).state or 0)
                 meters = float(hass.states.get(usage_meters_entity).state or 0)
@@ -268,6 +275,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                         },
                         blocking=True,
                     )
+                )
+
+        for tray in ams_trays:
+            if tray:
+                async_track_state_change_event(
+                    hass,
+                    [tray],
+                    lambda event, tray_id=tray: _tray_active_listener(event, tray_id),
                 )
 
         async_track_state_change_event(hass, [ams_status_entity], _ams_status_changed)
